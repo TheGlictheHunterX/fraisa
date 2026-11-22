@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GetBoth — The Idea | Students earn, businesses grow</title>
+<meta name="description" content="GetBoth connects Tunisian students with short, paid local shifts. Accept in one click, work up to 2 hours, get paid when the business marks the job finished." />
+<style>
+  :root{
+    --blue:#1d4ed8; --blue-dark:#0b2a6b; --sky:#e8f1ff; --amber:#f59e0b;
+    --ink:#0f172a; --muted:#64748b; --line:#dbe6f7; --white:#fff;
+    --shadow:0 18px 50px rgba(15,40,100,.10); --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); background:#f7faff;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.65; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(900px 500px at 12% -5%, #dbeafe 0%, transparent 60%),
+      radial-gradient(800px 500px at 95% 8%, #fef3c7 0%, transparent 55%),
+      radial-gradient(700px 600px at 50% 110%, #dcfce7 0%, transparent 60%);
+  }
+  body::after{
+    content:""; position:fixed; inset:0; z-index:-1; opacity:.35; pointer-events:none;
+    background-image:linear-gradient(#dbe6f7 1px,transparent 1px),linear-gradient(90deg,#dbe6f7 1px,transparent 1px);
+    background-size:44px 44px; mask-image:linear-gradient(to bottom,#000,transparent 75%);
+  }
+  a{color:inherit}
+  .wrap{width:min(1120px,92vw); margin-inline:auto}
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:rgba(247,250,255,.78); border-bottom:1px solid rgba(219,230,247,.8);
+  }
+  .nav-in{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:-.04em; font-size:1.25rem}
+  .brand-mark{
+    width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--blue),#60a5fa); color:#fff; font-size:1rem;
+    box-shadow:0 6px 16px rgba(29,78,216,.32);
+  }
+  .brand small{display:block;font-size:.58rem;letter-spacing:.22em;color:var(--blue);font-weight:800;margin-top:-4px}
+  .nav-links{display:flex;gap:22px;align-items:center;font-size:.9rem;font-weight:600;color:var(--muted)}
+  .nav-links a{text-decoration:none;transition:.2s}
+  .nav-links a:hover{color:var(--blue)}
+  .pill{padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 4px 14px rgba(15,40,100,.06)}
+
+  header.hero{padding:78px 0 46px; text-align:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;
+    background:#fff;border:1px solid var(--line);color:var(--blue);font-size:.78rem;
+    font-weight:800;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 6px 20px rgba(29,78,216,.08);
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.16);animation:pulse 2s infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 9px rgba(34,197,94,0)}}
+  h1{
+    margin:24px auto 16px;max-width:900px;font-size:clamp(2.6rem,6.3vw,5.1rem);
+    line-height:1.05;letter-spacing:-.055em;font-weight:900;
+  }
+  h1 .grad{background:linear-gradient(100deg,var(--blue),#38bdf8 55%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{max-width:690px;margin:0 auto 30px;font-size:clamp(1.02rem,2vw,1.25rem);color:var(--muted)}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    padding:14px 24px;border-radius:14px;text-decoration:none;font-weight:800;font-size:.95rem;
+    border:1px solid transparent;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;box-shadow:0 12px 26px rgba(29,78,216,.3)}
+  .btn-ghost{background:#fff;color:var(--blue-dark);border-color:var(--line);box-shadow:0 8px 20px rgba(15,40,100,.07)}
+  .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:30px;font-size:.85rem;color:var(--muted);font-weight:600}
+  .trust span::before{content:"✓";color:#16a34a;margin-right:7px;font-weight:900}
+
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:26px 0 10px}
+  .strip div{
+    background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:18px;
+    padding:20px 16px;text-align:center;box-shadow:0 8px 24px rgba(15,40,100,.05);
+  }
+  .strip b{display:block;font-size:1.85rem;letter-spacing:-.04em;color:var(--blue-dark);line-height:1.1}
+  .strip small{color:var(--muted);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+
+  section{padding:72px 0}
+  .kicker{font-size:.76rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin:0 0 10px}
+  h2{font-size:clamp(1.9rem,4vw,3rem);letter-spacing:-.045em;line-height:1.12;margin:0 0 14px;font-weight:900}
+  .sub{color:var(--muted);max-width:650px;font-size:1.05rem;margin:0 0 34px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+  .card{
+    background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:var(--radius);
+    padding:28px;box-shadow:var(--shadow);
+  }
+  .card h3{margin:0 0 8px;font-size:1.15rem;letter-spacing:-.02em}
+  .card p{margin:0;color:var(--muted);font-size:.96rem}
+  .problem{display:grid;gap:14px}
+  .problem .card{border-left:4px solid #f87171}
+  .solution .card{border-left:4px solid #22c55e}
+  .icon{
+    width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.3rem;
+    background:var(--sky);margin-bottom:14px;
+  }
+
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:step}
+  .step{
+    background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 22px;
+    box-shadow:0 10px 28px rgba(15,40,100,.06);position:relative;overflow:hidden;
+  }
+  .step::before{
+    counter-increment:step;content:"0" counter(step);position:absolute;right:14px;top:6px;
+    font-size:3.2rem;font-weight:900;color:#eef4ff;letter-spacing:-.06em;
+  }
+  .step .ic{font-size:1.8rem;margin-bottom:12px}
+  .step h3{margin:0 0 6px;font-size:1.05rem;position:relative}
+  .step p{margin:0;color:var(--muted);font-size:.9rem;position:relative}
+  .step .tag{display:inline-block;margin-top:12px;padding:5px 10px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:.72rem;font-weight:800}
+
+  .earn{
+    background:linear-gradient(125deg,#0b2a6b,#1d4ed8 60%,#2563eb);color:#fff;border-radius:28px;
+    padding:clamp(28px,5vw,54px);box-shadow:0 26px 60px rgba(29,78,216,.28);position:relative;overflow:hidden;
+  }
+  .earn::after{
+    content:"";position:absolute;width:340px;height:340px;border-radius:50%;right:-90px;top:-140px;
+    background:radial-gradient(circle,rgba(245,158,11,.45),transparent 65%);
+  }
+  .earn h2,.earn .sub{color:#fff}
+  .earn .sub{opacity:.82}
+  .math{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;position:relative;z-index:1;margin-top:26px}
+  .math div{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:22px;text-align:center;backdrop-filter:blur(6px)}
+  .math b{display:block;font-size:2rem;letter-spacing:-.04em;color:#fde68a}
+  .math small{font-size:.8rem;opacity:.85;font-weight:700}
+  .math .total{background:#fff;color:var(--blue-dark)}
+  .math .total b{color:var(--blue)}
+  .math .total small{color:var(--muted)}
+  .earn-note{margin-top:22px;font-size:.92rem;opacity:.9;position:relative;z-index:1}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .feature{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 10px 28px rgba(15,40,100,.06)}
+  .feature .icon{background:#fff7ed;color:#b45309}
+  .feature h3{margin:0 0 8px;font-size:1.08rem}
+  .feature p{margin:0;color:var(--muted);font-size:.92rem}
+
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+  .timeline::before{content:"";position:absolute;left:8%;right:8%;top:26px;height:3px;background:linear-gradient(90deg,var(--blue),#93c5fd,var(--amber))}
+  .tl{text-align:center;padding:0 12px;position:relative;z-index:1}
+  .tl .num{width:54px;height:54px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid var(--blue);color:var(--blue);font-weight:900;box-shadow:0 6px 16px rgba(29,78,216,.2)}
+  .tl:last-child .num{border-color:var(--amber);color:#b45309}
+  .tl b{display:block;font-size:.95rem}
+  .tl small{color:var(--muted);font-size:.8rem;display:block;margin-top:4px}
+
+  .final{
+    text-align:center;background:linear-gradient(160deg,#fff,#eef5ff 70%,#fffbeb);
+    border:1px solid var(--line);border-radius:30px;padding:clamp(32px,6vw,66px);box-shadow:var(--shadow);
+  }
+  .final h2{font-size:clamp(2rem,4.6vw,3.4rem)}
+  .fullscreen-btn{
+    margin-top:16px;padding:20px 42px;font-size:1.08rem;border-radius:18px;
+    background:linear-gradient(135deg,#0b2a6b,var(--blue));color:#fff;border:0;cursor:pointer;
+    font-weight:900;box-shadow:0 16px 36px rgba(29,78,216,.34);transition:transform .2s,box-shadow .2s;
+  }
+  .fullscreen-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 22px 46px rgba(29,78,216,.42)}
+  .hint{font-size:.8rem;color:var(--muted);margin-top:14px}
+  .mini-full{
+    position:fixed;right:18px;bottom:18px;z-index:60;padding:12px 16px;border-radius:14px;
+    border:1px solid var(--line);background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    color:var(--blue-dark);font-weight:800;box-shadow:0 10px 28px rgba(15,40,100,.18);cursor:pointer;
+    opacity:0;transform:translateY(12px);pointer-events:none;transition:.3s;
+  }
+  .mini-full.show{opacity:1;transform:none;pointer-events:auto}
+  footer{padding:34px 0 90px;text-align:center;color:var(--muted);font-size:.85rem}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.dot{animation:none}}
+
+  @media(max-width:900px){
+    .split,.steps,.grid3,.timeline,.strip,.math{grid-template-columns:1fr 1fr}
+    .timeline::before{display:none}
+    .nav-links a:not(.pill){display:none}
+  }
+  @media(max-width:620px){
+    .strip,.steps,.grid3,.math,.split{grid-template-columns:1fr}
+    .timeline{grid-template-columns:1fr 1fr;row-gap:26px}
+    header.hero{padding-top:52px}
+    .pill{display:none}
+  }
+  @media print{.mini-full,.navbar,.cta-row{display:none}body{background:#fff}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <span class="brand-mark">G</span>
+      <span>GetBoth<small>FREELANCE · TUNISIA</small></span>
+    </div>
+    <div class="nav-links">
+      <a href="#idea">The idea</a>
+      <a href="#earn">Earn money</a>
+      <a href="#how">How it works</a>
+      <a href="#trust">Trust</a>
+      <a class="pill" href="#final">⛶ Full presentation</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> A student-first micro-work marketplace</span>
+    <h1>Students deserve<br /><span class="grad">flexible income.</span></h1>
+    <p class="lede">
+      GetBoth connects Tunisian students with real local businesses that need a hand for
+      <strong>two hours or less</strong>. Accept a shift in one click, do the work, and get paid
+      the moment the business marks it finished.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#earn">See how students earn →</a>
+      <a class="btn btn-ghost" href="#idea">Discover the concept</a>
+    </div>
+    <div class="trust">
+      <span>100% free to join</span><span>No experience needed</span>
+      <span>Short local shifts</span><span>Payment confirmed by the business</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="strip reveal">
+    <div><b>≤ 2h</b><small>Per shift, max</small></div>
+    <div><b>10 TND</b><small>Average hourly rate</small></div>
+    <div><b>1 click</b><small>To accept a shift</small></div>
+    <div><b>24h</b><small>Chats auto-deleted</small></div>
+  </div>
+</div>
+
+<section id="idea">
+  <div class="wrap">
+    <p class="kicker">The concept</p>
+    <h2>A simple idea: turn spare hours into real money.</h2>
+    <p class="sub">
+      Students have flexible time but few ways to earn safely. Local shops have short bursts of work
+      but no easy way to find reliable help. GetBoth brings the two together in one trusted place.
+    </p>
+    <div class="split">
+      <div class="problem">
+        <div class="card reveal">
+          <div class="icon">🎓</div>
+          <h3>For students</h3>
+          <p>Campus life is expensive. Traditional part-time jobs demand fixed schedules, long commutes and prior experience — impossible when classes come first.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon">🏪</div>
+          <h3>For local businesses</h3>
+          <p>A café needs an extra pair of hands for the morning rush. A shop needs someone for two hours on Saturday. Posting a full-time contract is overkill.</p>
+        </div>
+      </div>
+      <div class="solution">
+        <div class="card reveal">
+          <div class="icon">🤝</div>
+          <h3>GetBoth matches them</h3>
+          <p>Businesses post a short, clearly-priced shift. Students browse offers near them, see the rate, duration and city upfront, then accept instantly. No CV, no interview, no waiting weeks for a reply.</p>
+          <p style="margin-top:14px;color:var(--blue);font-weight:800">One platform. Real shifts. Fair pay. ⭐</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="earn">
+  <div class="wrap">
+    <div class="earn reveal">
+      <p class="kicker" style="color:#fde68a">How students earn money</p>
+      <h2>Small shifts. Real money. Paid on time.</h2>
+      <p class="sub">
+        Every offer shows the exact hourly rate and duration before you accept — so you always know
+        what you'll earn. Money is credited to your GetBoth balance only when the business confirms
+        your work is finished.
+      </p>
+      <div class="math">
+        <div><b>2h</b><small>One weekend shift</small></div>
+        <div><b>× 11 TND/h</b><small>Local shop rate</small></div>
+        <div class="total"><b>22 TND</b><small>Credited after "Finished" ✓</small></div>
+      </div>
+      <p class="earn-note">
+        💡 Do two or three short shifts a week and that's <strong>44–66 TND</strong> — enough to cover
+        transport, meals or course materials, without missing a lecture. Hours worked and finished
+        shifts are tracked on your dashboard, and businesses rate you 1–5 ★ so great students get noticed.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2>From browsing to paid in four steps.</h2>
+    <p class="sub">Built for a phone, designed for a student schedule.</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="ic">🔎</div>
+        <h3>Browse shifts</h3>
+        <p>See open offers near you with the rate, city and duration. Every shift is 2 hours or less.</p>
+        <span class="tag">Free to browse</span>
+      </div>
+      <div class="step reveal">
+        <div class="ic">✋</div>
+        <h3>Accept in one click</h3>
+        <p>The offer instantly becomes ACCEPTED, your work status appears, and a private chat opens with the business.</p>
+        <span class="tag">Instant confirmation</span>
+      </div>
+      <div class="step reveal">
+        <div class="ic">💬</div>
+        <h3>Chat &amp; show up</h3>
+        <p>Coordinate the details in a 3s-updating chat. For privacy, chats are hard-deleted after 24 hours.</p>
+        <span class="tag">Private by design</span>
+      </div>
+      <div class="step reveal">
+        <div class="ic">💰</div>
+        <h3>Get paid + rated</h3>
+        <p>When the business marks the work finished, your balance, hours and completed shifts update at once, plus a 1–5 ★ review.</p>
+        <span class="tag">Paid on confirmation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="wrap">
+    <p class="kicker">Trust &amp; control</p>
+    <h2>Fair for students. Useful for businesses.</h2>
+    <p class="sub">The whole lifecycle is transparent on both sides — no ambiguity about who is doing what, or when money is earned.</p>
+    <div class="grid3">
+      <div class="feature reveal">
+        <div class="icon">📊</div>
+        <h3>Status you can see</h3>
+        <p>Offers move PENDING → ACCEPTED → ENDED, and every student's work shows Accepted, Finished or Cancelled.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="icon">🧾</div>
+        <h3>Business-managed payouts</h3>
+        <p>Only the business marks work finished — that action credits pay, minutes worked and the shift count together.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="icon">⭐</div>
+        <h3>Reputation that travels</h3>
+        <p>Businesses rate students 1–5 stars with an optional note. Reviews appear on student dashboards and applicant lists.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="icon">🛡️</div>
+        <h3>Moderated community</h3>
+        <p>Admins suspend or ban with a written reason. Businesses can cancel work or remove an offer — with clear statuses for everyone.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="icon">⏱️</div>
+        <h3>Privacy built in</h3>
+        <p>Chats expire automatically 24 hours after a shift is accepted and are deleted from the database with all messages.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="icon">🇹🇳</div>
+        <h3>Made in Tunisia</h3>
+        <p>Local cities, local rates and local businesses — a demo built around the real need for flexible student income.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">The journey</p>
+    <h2>One shift, end to end.</h2>
+    <div class="timeline reveal" style="margin-top:34px">
+      <div class="tl"><div class="num">1</div><b>Posted</b><small>Business publishes a paid shift</small></div>
+      <div class="tl"><div class="num">2</div><b>Accepted</b><small>Student claims it instantly</small></div>
+      <div class="tl"><div class="num">3</div><b>Finished</b><small>Business confirms the work</small></div>
+      <div class="tl"><div class="num">4</div><b>Paid &amp; rated</b><small>Balance up, 1–5 ★ review saved</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="final">
+  <div class="wrap">
+    <div class="final reveal">
+      <p class="kicker">Ready to see it live?</p>
+      <h2>GetBoth — work small.<br /><span class="grad">Earn for real.</span></h2>
+      <p class="sub" style="margin-inline:auto">
+        This interactive demo includes the student dashboard, business offer management,
+        automated chat cleanup and the star feedback system.
+      </p>
+      <button class="fullscreen-btn" id="bigFull" type="button">⛶ Present in fullscreen</button>
+      <p class="hint">Tip: press <strong>F11</strong> at any time, or use the ⛶ button at the bottom-right.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">GetBoth.tn · Freelance Edition · Made in Tunisia 🇹🇳 · Concept &amp; interactive demo</div>
+</footer>
+
+<button class="mini-full" id="miniFull" type="button" title="Toggle fullscreen (F11)">⛶ Fullscreen</button>
+
+<script>
+  (function () {
+    var revealers = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      revealers.forEach(function (el) { io.observe(el); });
+    } else {
+      revealers.forEach(function (el) { el.classList.add('in'); });
+    }
+
+    var mini = document.getElementById('miniFull');
+    window.addEventListener('scroll', function () {
+      mini.classList.toggle('show', window.scrollY > 420);
+    }, { passive: true });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        var el = document.documentElement;
+        var req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) {
+          var p = req.call(el);
+          if (p && p.catch) p.catch(function () { alert('Fullscreen was blocked. Press F11 to enter fullscreen.'); });
+        } else {
+          alert('Fullscreen is not supported here. Press F11 instead.');
+        }
+      } else {
+        var exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) exit.call(document);
+      }
+    }
+    document.getElementById('bigFull').addEventListener('click', toggleFullscreen);
+    mini.addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', function () {
+      mini.textContent = document.fullscreenElement ? '⛶ Exit fullscreen' : '⛶ Fullscreen';
+    });
+  })();
+</script>
+</body>
+</html>

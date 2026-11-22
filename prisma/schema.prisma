@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  BUSINESS
+  ADMIN
+}
+
+enum Status {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum OfferStatus {
+  PENDING            // posted, visible to students, waiting for an accept
+  ACCEPTED           // a student accepted; work is in progress
+  ENDED              // business marked the shift finished; earnings credited
+  REMOVED_BY_BUSINESS
+  REMOVED_BY_ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  CANCELLED
+}
+
+/** Business subscriptions. Only an admin can move a business off the 7-day free trial. */
+enum Plan {
+  FREE_TRIAL
+  BOTH_DIAMOND
+  GOLDEN_EDGE
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  passwordHash   String
+  role           Role
+  status         Status         @default(ACTIVE)
+  name           String
+  createdAt      DateTime       @default(now())
+
+  studentProfile  StudentProfile?
+  businessProfile BusinessProfile?
+  offers          Offer[]          @relation("BusinessOffers")
+  applications    Application[]    @relation("StudentApplications")
+  messages        Message[]
+  moderationLogs  ModerationLog[]  @relation("AdminLogs")
+  feedbackGiven   Feedback[]       @relation("BusinessFeedback")
+  feedbackReceived Feedback[]      @relation("StudentFeedback")
+  walletEntries   WalletEntry[]    @relation("StudentWallet")
+}
+
+model StudentProfile {
+  id             String @id @default(cuid())
+  userId         String @unique
+  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  city           String
+  university     String
+  bio            String
+  phone          String
+  // Credited only when a BUSINESS marks the shift finished in its dashboard.
+  balanceTnd     Float  @default(0)
+  minutesWorked  Int    @default(0)
+  completedShifts Int   @default(0)
+}
+
+model BusinessProfile {
+  id          String @id @default(cuid())
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName String
+  category    String
+  city        String
+  description String
+  phone       String
+
+  plan           Plan      @default(FREE_TRIAL)
+  planExpiresAt  DateTime  @default(now())
+  planGrantedBy  String?
+  planGrantedAt  DateTime?
+}
+
+model Offer {
+  id          String      @id @default(cuid())
+  businessId  String
+  business    User        @relation("BusinessOffers", fields: [businessId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  city        String
+  hourlyRate  Float
+  durationMin Int
+  status      OfferStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+
+  applications Application[]
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  offerId     String
+  offer       Offer             @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User              @relation("StudentApplications", fields: [studentId], references: [id], onDelete: Cascade)
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  completedAt DateTime?
+
+  chat        Chat?
+  feedback    Feedback?
+  walletEntry WalletEntry?
+
+  @@unique([offerId, studentId])
+}
+
+/** A business rates a student (1-5 stars) only after marking their work finished. */
+model Feedback {
+  id            String      @id @default(cuid())
+  rating        Int
+  comment       String?
+  applicationId String      @unique
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  studentId     String
+  student       User        @relation("StudentFeedback", fields: [studentId], references: [id], onDelete: Cascade)
+  businessId    String
+  business      User        @relation("BusinessFeedback", fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Chat {
+  id            String      @id @default(cuid())
+  applicationId String      @unique
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  // Hard deletion deadline: a 24h cron/lazy purge removes the chat and all its messages.
+  expiresAt     DateTime
+
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+}
+
+/** One credit line per paid shift — the student's earnings ledger / wallet history. */
+model WalletEntry {
+  id            String      @id @default(cuid())
+  studentId     String
+  student       User        @relation("StudentWallet", fields: [studentId], references: [id], onDelete: Cascade)
+  applicationId String      @unique
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  amountTnd     Float
+  minutes       Int
+  description   String
+  createdAt     DateTime    @default(now())
+
+  @@index([studentId, createdAt])
+}
+
+model ModerationLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  admin      User     @relation("AdminLogs", fields: [adminId], references: [id])
+  action     String
+  targetType String
+  targetId   String
+  reason     String
+  createdAt  DateTime @default(now())
+}
